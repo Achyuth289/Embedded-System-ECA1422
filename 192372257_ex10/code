@@ -1,0 +1,45 @@
+;achyuth
+;192372257;
+;embedded:eca1422
+// Pin definitions 
+// (Note: Comments updated to match the actual pin numbers used)
+const int statusLedPin = 13;  
+const int pirSensorPin = 12;  
+
+void setup() {
+  // Initialize serial communication for data logging
+  Serial.begin(9600);
+  
+  // Configure the sensor as an input and the LED as an output
+  pinMode(pirSensorPin, INPUT); 
+  pinMode(statusLedPin, OUTPUT); 
+  
+  // Print a CSV header for easy data export and statistical analysis
+  Serial.println("Timestamp(ms), Raw_Sensor_State, Filtered_Motion_Status");
+}
+
+void loop() {
+  // Read the digital state from the sensor (using int instead of long)
+  int rawState = digitalRead(pirSensorPin);
+  
+  // Print the timestamp and the raw state
+  Serial.print(millis());
+  Serial.print(", ");
+  Serial.print(rawState);
+  Serial.print(", ");
+  
+  // Process the raw state and update the LED
+  if (rawState == HIGH) {
+    digitalWrite(statusLedPin, HIGH);
+    // Output '1' for motion detected to simplify charting and data analysis
+    Serial.println("1"); 
+  } 
+  else {
+    digitalWrite(statusLedPin, LOW);
+    // Output '0' for motion absent
+    Serial.println("0"); 
+  }
+  
+  // Wait 1 second before taking the next reading
+  delay(1000);
+}
